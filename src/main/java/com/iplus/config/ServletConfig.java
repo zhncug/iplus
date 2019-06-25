@@ -1,6 +1,6 @@
 package com.iplus.config;
 
-import com.iplus.common.MultiReadHttpServletRequest;
+import com.iplus.wechat.common.MultiReadHttpServletRequest;
 import com.iplus.wechat.api.MvcConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -14,9 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 public class ServletConfig {
+
     @Bean
-    @Qualifier("wisteria")
-    public ServletRegistrationBean frontendServlet() {
+    @Qualifier("wx")
+    public ServletRegistrationBean wechatServlet() {
         DispatcherServlet dispatcherServlet = new DispatcherServlet(){
             @Override
             protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -29,7 +30,7 @@ public class ServletConfig {
         dispatcherServlet.setApplicationContext(context);
 
         ServletRegistrationBean servletRegistrationBean =
-                new ServletRegistrationBean(dispatcherServlet, "/*");
+                new ServletRegistrationBean(dispatcherServlet, "/wx/**");
         servletRegistrationBean.setName("wx");
         servletRegistrationBean.setLoadOnStartup(1);
 

@@ -2,24 +2,22 @@ package com.iplus.wechat.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.iplus.common.CommonDateFormat;
-import com.iplus.common.FullBeanNameGenerator;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import com.iplus.wechat.common.CommonDateFormat;
+import com.iplus.wechat.common.FullBeanNameGenerator;
+import com.iplus.wechat.common.request.RequestContextInterceptor;
+import org.springframework.context.annotation.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.List;
 
 @Configuration
-@ComponentScan(basePackages = "com.iplus.wechat.api",
-        nameGenerator = FullBeanNameGenerator.class)
+@ComponentScan(basePackages = "com.iplus.wechat.api")
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableWebMvc
-@EnableAspectJAutoProxy
 public class MvcConfig extends WebMvcConfigurerAdapter {
     @Bean
     public MappingJackson2HttpMessageConverter converter() {
@@ -33,5 +31,10 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 
         converters.add(converter());
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new RequestContextInterceptor()).addPathPatterns("/wx/*");
     }
 }
