@@ -1,5 +1,6 @@
 package com.iplus.wechat.service;
 
+import com.iplus.wechat.common.WechatApiConstants;
 import com.iplus.wechat.common.utils.DesUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +15,6 @@ import org.springframework.web.client.RestTemplate;
  **/
 @Component
 public class WxApiService {
-
-    private static final String WX_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=?&secret=?";
 
     public static final String SECRET_KEY = "iplus123";
 
@@ -34,7 +33,7 @@ public class WxApiService {
 
     public String getAccessToken() {
 
-        String accessToken = String.format(WX_ACCESS_TOKEN_URL, appId, secert);
+        String accessToken = String.format(WechatApiConstants.WX_ACCESS_TOKEN_URL, appId, secert);
         ResponseEntity<String> response = restTemplate.getForEntity(accessToken, String.class);
         if (response.getStatusCode().equals(HttpStatus.OK)) {
             String result = response.getBody();
